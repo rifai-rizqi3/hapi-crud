@@ -24,58 +24,57 @@ const init = async () => {
     // });
 
     // Define Schema
-    let noteSchema = new mongoose.Schema({
-        title: String,
-        important: Boolean,
-        description: String
+    let employeeSchema = new mongoose.Schema({
+        name: String,
+        role: String
     });
 
     // Create Model
-    const Note = mongoose.model('Notes', noteSchema);
+    const Employee = mongoose.model('Employes', employeeSchema);
 
-    // Create Note
+    // Create employee
     server.route({
         method: 'POST',
-        path: '/api/note',
+        path: '/api/employee',
         handler: async (request, h) => {
             let info = request.payload;
             console.log(info);
-            let newInfo = new Note(info);
+            let newInfo = new Employee(info);
             await newInfo.save();
-            return h.response("Success");
+            return h.response("Berhasil di tambahkan");
         }
     });
 
-    // Get list of Notes and filter the list using query parameters
+    // Get
     server.route({
         method: 'GET',
-        path: '/api/notes',
+        path: '/api/employes',
         handler: async (request, h) => {
             let params = request.query;
-            let infos = await Note.find(params).lean();
+            let infos = await Employee.find(params).lean();
             return h.response(infos);
         }
     });
 
-    // Update Note
+    // Update
     server.route({
         method: 'PUT',
-        path: '/api/note/{id}',
+        path: '/api/employee/{id}',
         handler: async (request, h) => {
             let params = request.params.id;
             let info = request.payload;
-            let infos = await Note.findByIdAndUpdate(params, info, { new: true }).lean();
+            let infos = await Employee.findByIdAndUpdate(params, info, { new: true }).lean();
             return h.response(infos);
         }
     });
 
-    // Delete Note
+    // Delete
     server.route({
         method: 'DELETE',
-        path: '/api/note/{id}',
+        path: '/api/employee/{id}',
         handler: async (request, h) => {
             let params = request.params.id;
-            let infos = await Note.findByIdAndDelete(params).lean();
+            let infos = await Employee.findByIdAndDelete(params).lean();
             return h.response(infos);
         }
     });
